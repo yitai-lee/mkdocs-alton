@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>for my note - Darren</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "for my note";
+        var mkdocs_page_input_path = "note.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="..">
+          <img src="../image/favicon.ico" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../Philippines/">Philippines</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">for my note</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#mkdocs_1">📌 步驟一：安裝 MkDocs</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#python">✅ 安裝 Python（若尚未安裝）</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#mkdocs_2">✅ 安裝 MkDocs 本體</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_1">✅ 確認安裝成功</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_2">📌 步驟二：建立新專案</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#mkdocs_3">✅ 建立一個新的 MkDocs 專案</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_3">📌 步驟三：啟動本地預覽伺服器</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_4">📌 步驟四：編輯內容</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mkdocsyml">📌 步驟五：設定導覽列（mkdocs.yml）</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_5">📌 步驟六：建置靜態網站</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#github-pages">📌 步驟七：部署到 GitHub Pages（可選）</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-git-init">步驟 1：初始化 Git 倉庫（如果尚未 init）</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-github-pages">步驟 2：部署至 GitHub Pages</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_6">✅ 完成！</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Darren</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">for my note</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="mkdocs">📘 使用 MkDocs 建立文件網站教學筆記</h1>
+<p>以下為 MkDocs 搭建網站的完整步驟與指令，適用於 Windows / macOS / Linux。</p>
+<hr />
+<h2 id="mkdocs_1">📌 步驟一：安裝 MkDocs</h2>
+<h3 id="python">✅ 安裝 Python（若尚未安裝）</h3>
+<p>MkDocs 是 Python 撰寫的工具，請先安裝 Python 3.7+<br />
+可以到官方下載：https://www.python.org/downloads/</p>
+<p>安裝後請確認版本：</p>
+<pre><code class="language-bash">python --version
+</code></pre>
+<p>或</p>
+<pre><code class="language-bash">python3 --version
+</code></pre>
+<h3 id="mkdocs_2">✅ 安裝 MkDocs 本體</h3>
+<pre><code class="language-bash">pip install mkdocs
+</code></pre>
+<h3 id="_1">✅ 確認安裝成功</h3>
+<pre><code class="language-bash">mkdocs --version
+</code></pre>
+<hr />
+<h2 id="_2">📌 步驟二：建立新專案</h2>
+<h3 id="mkdocs_3">✅ 建立一個新的 MkDocs 專案</h3>
+<pre><code class="language-bash">mkdocs new my-docs
+cd my-docs
+</code></pre>
+<p>這會產生一個專案結構如下：</p>
+<pre><code>my-docs/
+├── docs/
+│   └── index.md        ← 預設首頁內容
+└── mkdocs.yml          ← 設定檔
+</code></pre>
+<hr />
+<h2 id="_3">📌 步驟三：啟動本地預覽伺服器</h2>
+<pre><code class="language-bash">mkdocs serve
+</code></pre>
+<p>接著打開瀏覽器輸入網址：</p>
+<pre><code>http://127.0.0.1:8000/
+</code></pre>
+<p>就能即時預覽你撰寫的 Markdown 文件。</p>
+<hr />
+<h2 id="_4">📌 步驟四：編輯內容</h2>
+<p>你可以在 <code>docs/</code> 目錄下新增你的 Markdown 文件，例如：</p>
+<pre><code>docs/
+├── index.md
+├── about/
+│   └── license.md
+├── user-guide/
+│   ├── writing-your-docs.md
+│   └── styling-your-docs.md
+</code></pre>
+<hr />
+<h2 id="mkdocsyml">📌 步驟五：設定導覽列（<code>mkdocs.yml</code>）</h2>
+<p>打開 <code>mkdocs.yml</code>，設定導覽列如下：</p>
+<pre><code class="language-yaml">site_name: 我的文件網站
+
+nav:
+  - Home: index.md
+  - User Guide:
+      - Writing your docs: user-guide/writing-your-docs.md
+      - Styling your docs: user-guide/styling-your-docs.md
+  - About:
+      - License: about/license.md
+</code></pre>
+<hr />
+<h2 id="_5">📌 步驟六：建置靜態網站</h2>
+<p>當你撰寫完成後，使用下列指令生成靜態 HTML 網站：</p>
+<pre><code class="language-bash">mkdocs build
+</code></pre>
+<p>這會在目錄中產生 <code>site/</code> 資料夾，裡面就是可上傳到 Web 主機的 HTML 靜態網站。</p>
+<hr />
+<h2 id="github-pages">📌 步驟七：部署到 GitHub Pages（可選）</h2>
+<p>如果你想把網站部署到 GitHub Pages：</p>
+<h3 id="1-git-init">步驟 1：初始化 Git 倉庫（如果尚未 init）</h3>
+<pre><code class="language-bash">git init
+git remote add origin https://github.com/你的帳號/你的repo.git
+</code></pre>
+<h3 id="2-github-pages">步驟 2：部署至 GitHub Pages</h3>
+<pre><code class="language-bash">mkdocs gh-deploy
+</code></pre>
+<p>這會自動將 <code>site/</code> 資料夾內容部署到 GitHub Pages 的 <code>gh-pages</code> 分支。</p>
+<hr />
+<h2 id="_6">✅ 完成！</h2>
+<p>現在你已經完成 MkDocs 網站的搭建與部署，可以將這份筆記加入到你的文件中！</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../Philippines/" class="btn btn-neutral float-left" title="Philippines"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../Philippines/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
