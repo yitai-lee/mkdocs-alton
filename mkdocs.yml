@@ -3,6 +3,7 @@ nav :
  - Home : index.md
  - About : about.md
  - Philippines : Philippines.md
+ - for my note : note.md
 theme:
   name: readthedocs
   logo: image/favicon.ico
