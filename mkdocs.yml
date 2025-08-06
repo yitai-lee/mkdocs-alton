@@ -1,0 +1,9 @@
+site_name: Darren
+nav :
+ - Home : index.md
+ - About : about.md
+ - Philippines : Philippines.md
+theme:
+  name: readthedocs
+  logo: image/favicon.ico
+
