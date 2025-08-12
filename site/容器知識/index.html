@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>linux_container_virtualization_notes.md - Darren</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "linux_container_virtualization_notes.md";
+        var mkdocs_page_input_path = "\u5bb9\u5668\u77e5\u8b58.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="..">
+          <img src="../image/favicon.ico" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../Philippines/">Philippines</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../note/">for my note</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">linux_container_virtualization_notes.md</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#linux-namespace-cgroups">一、Linux 使用 Namespace 隔離與 cgroups 限制做資源管理</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#namespace">Namespace（命名空間）</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cgroups">cgroups（控制群組）</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#vm">二、VM（虛擬機）與容器差異</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#docker-podman">三、Docker 與 Podman 差異</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#docker-podman_1">四、Docker 與 Podman 容器重啟差異</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#kubernetesk8s-root-user-namespace">五、Kubernetes（K8s）中 Root 權限與 User Namespace 隔離</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#podman-systemd-quadlet">六、Podman 與 systemd / Quadlet</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_1">總結</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Darren</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">linux_container_virtualization_notes.md</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="linux">Linux 容器與虛擬化相關技術筆記</h1>
+<h2 id="linux-namespace-cgroups">一、Linux 使用 Namespace 隔離與 cgroups 限制做資源管理</h2>
+<h3 id="namespace">Namespace（命名空間）</h3>
+<ul>
+<li>提供資源的「視角隔離」，讓每個容器或程序有獨立的資源觀察範圍，如獨立的進程號（PID）、網路介面（NET）、掛載點（MNT）等，互相隔離看不到對方。</li>
+</ul>
+<h3 id="cgroups">cgroups（控制群組）</h3>
+<ul>
+<li>用於限制和管理系統資源（CPU、記憶體、磁碟 I/O 等）使用量，確保容器或程序不會占用超過配置的資源，避免單一容器資源暴走影響整體系統。</li>
+</ul>
+<h2 id="vm">二、VM（虛擬機）與容器差異</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>VM (虛擬機)</th>
+<th>容器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心概念</td>
+<td>模擬完整硬體環境，包含 CPU、記憶體等</td>
+<td>共用宿主機 OS 核心，只隔離使用者空間與資源</td>
+</tr>
+<tr>
+<td>系統組成</td>
+<td>完整客戶作業系統（含 Kernel）</td>
+<td>只有使用者空間，Kernel 與宿主共用</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>高，因獨立 Kernel</td>
+<td>較低，Kernel 漏洞可能導致容器逃逸</td>
+</tr>
+<tr>
+<td>資源消耗</td>
+<td>大</td>
+<td>輕量，快速啟動</td>
+</tr>
+<tr>
+<td>root 權限影響</td>
+<td>容器內 root 影響限於 VM</td>
+<td>容器內 root 權限可能直接危害宿主機安全</td>
+</tr>
+</tbody>
+</table>
+<h2 id="docker-podman">三、Docker 與 Podman 差異</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>Docker</th>
+<th>Podman</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>架構</td>
+<td>有常駐守護進程（dockerd）</td>
+<td>無守護進程，daemonless</td>
+</tr>
+<tr>
+<td>容器管理</td>
+<td>透過 dockerd 管理容器</td>
+<td>每個容器獨立運行</td>
+</tr>
+<tr>
+<td>預設權限</td>
+<td>預設以 root 身份執行</td>
+<td>支援 rootless 模式</td>
+</tr>
+<tr>
+<td>重啟機制</td>
+<td>支援 --restart 自動重啟</td>
+<td>需搭配 systemd 管理</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>root 權限較高</td>
+<td>rootless 減少攻擊面，較安全</td>
+</tr>
+</tbody>
+</table>
+<h2 id="docker-podman_1">四、Docker 與 Podman 容器重啟差異</h2>
+<ul>
+<li><strong>Docker</strong>：守護進程 dockerd 支援 <code>--restart</code> 參數，daemon 重啟或宿主機重啟會自動重啟容器。</li>
+<li><strong>Podman</strong>：無守護進程，預設不會自動重啟。可用 <code>podman generate systemd</code> 生成 systemd 服務單元，交由 systemd 管理。</li>
+</ul>
+<h2 id="kubernetesk8s-root-user-namespace">五、Kubernetes（K8s）中 Root 權限與 User Namespace 隔離</h2>
+<ul>
+<li>預設容器以 root 身份運行，風險較高。</li>
+<li>K8s 1.33 起，預設啟用 User Namespace 隔離（<code>hostUsers: false</code>），將容器 root UID 映射成宿主機非 root 用戶，降低風險。</li>
+<li>需 Linux Kernel ≥6.3，容器 runtime 與檔案系統支援。</li>
+</ul>
+<h2 id="podman-systemd-quadlet">六、Podman 與 systemd / Quadlet</h2>
+<ul>
+<li><strong>systemd</strong>：Linux 初始化系統與服務管理器，管理容器啟動與監控。</li>
+<li><strong>Quadlet</strong>：Podman 團隊推出的工具，用 YAML 格式簡化 systemd 服務單元編寫與管理。</li>
+</ul>
+<hr />
+<h2 id="_1">總結</h2>
+<table>
+<thead>
+<tr>
+<th>主題</th>
+<th>核心重點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Namespace + cgroups</td>
+<td>Namespace 隔離資源視角，cgroups 限制資源量</td>
+</tr>
+<tr>
+<td>VM vs 容器</td>
+<td>VM 獨立 kernel 高安全但重資源，容器輕量但風險高</td>
+</tr>
+<tr>
+<td>Docker vs Podman</td>
+<td>Docker 有守護進程，Podman 無守護進程且支援 rootless</td>
+</tr>
+<tr>
+<td>容器重啟</td>
+<td>Docker 支援自動重啟，Podman 需 systemd 管理</td>
+</tr>
+<tr>
+<td>K8s rootless</td>
+<td>1.33 版起預設 User Namespace 隔離降低 root 風險</td>
+</tr>
+<tr>
+<td>Podman 與 systemd / Quadlet</td>
+<td>systemd 管理生命週期，Quadlet 用 YAML 簡化配置</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../note/" class="btn btn-neutral float-left" title="for my note"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../note/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
