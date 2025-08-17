@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Docker常用命令 - Darren</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Docker\u5e38\u7528\u547d\u4ee4";
+        var mkdocs_page_input_path = "docker_commands.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="..">
+          <img src="../image/favicon.ico" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../note/">使用 MkDocs 建立文件網站教學筆記</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../%E5%AE%B9%E5%99%A8%E7%9F%A5%E8%AD%98/">Linux 容器筆記</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Docker常用命令</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-image">1. 映像檔操作 (Image)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-container">2. 容器操作 (Container)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3">3. 容器內操作</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4">4. 網路與埠口</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-volume">5. Volume (資料卷)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#6-docker-compose">6. Docker Compose</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#7">7. 系統管理</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Darren</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Docker常用命令</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="docker">Docker 常用命令整理</h1>
+<h2 id="1-image">1. 映像檔操作 (Image)</h2>
+<pre><code class="language-bash"># 搜尋映像檔
+docker search &lt;image&gt;
+
+# 下載映像檔
+docker pull &lt;image&gt;[:tag]
+
+# 列出本地映像檔
+docker images
+
+# 刪除映像檔
+docker rmi &lt;image_id&gt;
+
+# 檢視映像檔詳細資訊
+docker inspect &lt;image_id&gt;
+
+# 為映像檔加上標籤
+docker tag &lt;image_id&gt; &lt;repo&gt;:&lt;tag&gt;
+
+# 匯出映像檔為 tar
+docker save -o &lt;file&gt;.tar &lt;image&gt;
+
+# 匯入映像檔
+docker load -i &lt;file&gt;.tar
+</code></pre>
+<h2 id="2-container">2. 容器操作 (Container)</h2>
+<pre><code class="language-bash"># 建立並執行容器 (互動式)
+docker run -it &lt;image&gt; /bin/bash
+
+# 建立並執行容器 (背景執行)
+docker run -d --name &lt;container_name&gt; &lt;image&gt;
+
+# 列出正在執行的容器
+docker ps
+
+# 列出所有容器 (包含停止)
+docker ps -a
+
+# 停止容器
+docker stop &lt;container_id&gt;
+
+# 啟動容器
+docker start &lt;container_id&gt;
+
+# 重啟容器
+docker restart &lt;container_id&gt;
+
+# 刪除容器
+docker rm &lt;container_id&gt;
+
+# 檢視容器詳細資訊
+docker inspect &lt;container_id&gt;
+
+# 檢視容器資源使用
+docker stats
+</code></pre>
+<h2 id="3">3. 容器內操作</h2>
+<pre><code class="language-bash"># 進入容器
+docker exec -it &lt;container_id&gt; /bin/bash
+
+# 查看容器日誌
+docker logs &lt;container_id&gt;
+
+# 實時查看容器日誌
+docker logs -f &lt;container_id&gt;
+
+# 複製檔案：容器 -&gt; 主機
+docker cp &lt;container_id&gt;:/path/in/container /host/path
+
+# 複製檔案：主機 -&gt; 容器
+docker cp /host/path &lt;container_id&gt;:/path/in/container
+
+# 檢視容器內程序
+docker top &lt;container_id&gt;
+</code></pre>
+<h2 id="4">4. 網路與埠口</h2>
+<pre><code class="language-bash"># 建立容器並映射埠口
+docker run -d -p 8080:80 &lt;image&gt;
+
+# 檢視網路
+docker network ls
+
+# 建立自訂網路
+docker network create &lt;network_name&gt;
+
+# 加入容器到網路
+docker network connect &lt;network_name&gt; &lt;container_id&gt;
+
+# 從網路移除容器
+docker network disconnect &lt;network_name&gt; &lt;container_id&gt;
+
+# 檢視網路詳細資訊
+docker network inspect &lt;network_name&gt;
+</code></pre>
+<h2 id="5-volume">5. Volume (資料卷)</h2>
+<pre><code class="language-bash"># 建立 Volume
+docker volume create &lt;volume_name&gt;
+
+# 檢視 Volume 列表
+docker volume ls
+
+# 檢視 Volume 詳細資訊
+docker volume inspect &lt;volume_name&gt;
+
+# 刪除 Volume
+docker volume rm &lt;volume_name&gt;
+
+# 建立容器並掛載 Volume
+docker run -d -v &lt;volume_name&gt;:/path/in/container &lt;image&gt;
+</code></pre>
+<h2 id="6-docker-compose">6. Docker Compose</h2>
+<pre><code class="language-bash"># 啟動
+docker-compose up -d
+
+# 停止
+docker-compose down
+
+# 查看服務狀態
+docker-compose ps
+
+# 查看日誌
+docker-compose logs -f
+
+# 重新啟動
+docker-compose restart
+</code></pre>
+<h2 id="7">7. 系統管理</h2>
+<pre><code class="language-bash"># 檢視 Docker 系統資訊
+docker info
+
+# 清理未使用的資源
+docker system prune -a
+
+# 檢視磁碟使用情況
+docker system df
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../%E5%AE%B9%E5%99%A8%E7%9F%A5%E8%AD%98/" class="btn btn-neutral float-left" title="Linux 容器筆記"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../%E5%AE%B9%E5%99%A8%E7%9F%A5%E8%AD%98/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
