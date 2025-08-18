@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Ansible簡介及用法 - Darren</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Ansible\u7c21\u4ecb\u53ca\u7528\u6cd5";
+        var mkdocs_page_input_path = "ansible\u7c21\u4ecb\u53ca\u7528\u6cd5.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="..">
+          <img src="../image/favicon.ico" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../note/">使用 MkDocs 建立文件網站教學筆記</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../%E5%AE%B9%E5%99%A8%E7%9F%A5%E8%AD%98/">Linux 容器筆記</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../docker_commands/">Docker常用命令</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Ansible簡介及用法</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#ansible_1">什麼是 Ansible</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_1">名詞與生活比喻</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#inventory-playbook">Inventory 與 Playbook 關係</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ansible_2">如何使用 Ansible</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#role">建立 Role</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Darren</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Ansible簡介及用法</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ansible">Ansible 學習筆記</h1>
+<h2 id="ansible_1">什麼是 Ansible</h2>
+<p>Ansible 是一個基於 Python 的自動化工具，用來管理伺服器配置、部署應用程式及自動化 IT 任務。它採用 <strong>無代理（agentless）架構</strong>，透過 <strong>SSH 連線</strong> 管理目標主機，使用簡單易讀的 YAML 語法撰寫 Playbook。</p>
+<h3 id="_1">名詞與生活比喻</h3>
+<table>
+<thead>
+<tr>
+<th>名詞</th>
+<th>生活比喻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task</td>
+<td>做一件事 → 比如煮一杯咖啡</td>
+</tr>
+<tr>
+<td>Play</td>
+<td>一組人做一組任務 → 比如「媽媽煮咖啡、弟弟拿餅乾」</td>
+</tr>
+<tr>
+<td>Playbook</td>
+<td>整本活動手冊 → 「早晨聚會流程，從煮咖啡到擺桌子」</td>
+</tr>
+<tr>
+<td>Variable</td>
+<td>可替換的資訊 → 「咖啡口味」可以變化</td>
+</tr>
+<tr>
+<td>Role</td>
+<td>模組化單元 → 「煮咖啡的流程」可以重複用在不同場合</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="inventory-playbook">Inventory 與 Playbook 關係</h2>
+<ul>
+<li><strong>Inventory</strong>：主機清單</li>
+</ul>
+<pre><code class="language-ini">[helloworld] # 群組名稱
+localhost ansible_connection=local # 主機名稱 + 連線方式
+</code></pre>
+<p><img alt="inventory主機.png" src="../image/ansible/inventory%E4%B8%BB%E6%A9%9F.png" title="inventory主機.png" /></p>
+<ul>
+<li><strong>Playbook</strong>：告訴 Ansible"要對哪些主機做什麼事"</li>
+</ul>
+<pre><code class="language-yaml">- name: 執行Hello world列印的ansible  # Play 名稱
+  hosts: helloworld            # 操作的主機群組
+  gather_facts: no             # 不收集系統資訊
+
+  tasks:
+    - name: 這是第一個task任務  # Task 名稱
+      debug:
+        msg: &quot;Hello world&quot;          # Module debug 顯示訊息
+</code></pre>
+<p><img alt="playbook內容與實際執行.png" src="../image/ansible/playbook%E5%85%A7%E5%AE%B9%E8%88%87%E5%AF%A6%E9%9A%9B%E5%9F%B7%E8%A1%8C.png" title="playbook內容與實際執行.png" /></p>
+<blockquote>
+<p>注意：
+- Playbook 名稱可自訂，但執行時要指定正確路徑
+- 如果 <code>hosts:</code> 指向不存在的群組，會出現 <code>skipping: no hosts matched</code></p>
+</blockquote>
+<hr />
+<h2 id="ansible_2">如何使用 Ansible</h2>
+<ol>
+<li><strong>建立 Ansible 配置檔案</strong> <code>ansible.cfg</code>（這是為了可以直接使用 <code>ansible-playbook {playbook}</code>）</li>
+</ol>
+<pre><code class="language-ini">[defaults]
+inventory = ./inventory.ini
+</code></pre>
+<ol>
+<li><strong>建立 Inventory 清單</strong> <code>inventory.ini</code></li>
+</ol>
+<pre><code class="language-ini">[helloworld]
+localhost ansible_connection=local
+</code></pre>
+<ol>
+<li><strong>執行 Playbook</strong></li>
+</ol>
+<pre><code class="language-bash"># 指定 Inventory
+ansible-playbook -i inventory.ini playbook.yml
+
+# 使用 ansible.cfg 的預設 inventory
+ansible-playbook playbook.yml
+</code></pre>
+<hr />
+<h2 id="role">建立 Role</h2>
+<h1 id="ansible-role">Ansible Role 介紹</h1>
+<p>在 Ansible 裡，<strong>Role</strong> 是一個「模組化、可重複使用的任務單元」，它把相關的任務、變數、模板、靜態檔案、Handler 等都整理在一起，方便你在不同 Playbook 或專案中重複使用，而不需要每次都重寫整個流程。</p>
+<p>簡單說，<strong>Role 就像一個小型程式庫或功能模組</strong>。</p>
+<pre><code class="language-bash">ansible-galaxy init roles/檔名
+</code></pre>
+<p><img alt="如何創建galaxy.png" src="../image/ansible/%E5%A6%82%E4%BD%95%E5%89%B5%E5%BB%BAgalaxy.png" title="如何創建galaxy.png" /></p>
+<p>生成的 Role 結構如下：</p>
+<pre><code>roles/
+└── 檔名/
+├── README.md # Role 說明文件
+├── defaults/
+│ └── main.yml # 預設變數（低優先級）
+├── files/ # 靜態檔案，例如設定檔、安裝包
+├── handlers/
+│ └── main.yml # 通知 Handler，例如重啟服務
+├── meta/
+│ └── main.yml # Role 元資料，例如依賴其他 Role
+├── tasks/
+│ └── main.yml # 主要任務流程
+├── templates/ # Jinja2 模板檔案
+└── vars/
+└── main.yml # 高優先級變數
+</code></pre>
+<h1 id="ansible_3">Ansible 實務錯誤：目錄命名錯誤</h1>
+<h2 id="_2">錯誤現象</h2>
+<p>執行 <code>ansible-playbook</code> 時出現以下錯誤：</p>
+<pre><code class="language-bash">ERROR! the role 'hello' was not found in /path/to/roles/...
+</code></pre>
+<p><a href="../image/ansible/roles%E7%9B%AE%E9%8C%84.png"><img alt="roles目錄命名錯誤" src="../image/ansible/roles%E7%9B%AE%E9%8C%84.png" /></a></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../docker_commands/" class="btn btn-neutral float-left" title="Docker常用命令"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../docker_commands/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
