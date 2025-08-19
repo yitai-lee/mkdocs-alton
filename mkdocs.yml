@@ -1,11 +1,12 @@
 site_name: Darren
 nav :
  - Home : index.md
- - About : about.md
+# - About : about.md
  - 使用 MkDocs 建立文件網站教學筆記 : note.md
  - Linux 容器筆記 : 容器知識.md
  - Docker常用命令 :  docker_commands.md
  - Ansible簡介及用法 :  ansible簡介及用法.md
+ - 運維知識 : 運維知識.md
 theme:
   name: readthedocs
   logo: image/favicon.ico
