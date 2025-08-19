@@ -1,7 +1,7 @@
 site_name: Darren
 nav :
- - Home : index.md
-# - About : about.md
+# - Home : index.md
+ - About : about.md
  - 使用 MkDocs 建立文件網站教學筆記 : note.md
  - Linux 容器筆記 : 容器知識.md
  - Docker常用命令 :  docker_commands.md
