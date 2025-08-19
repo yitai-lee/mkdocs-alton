@@ -41,7 +41,7 @@
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
                 </li>
               </ul>
               <ul>
@@ -60,6 +60,8 @@
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">Ansible簡介及用法</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#ansible_1">什麼是 Ansible</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#idempotency">📌 什麼是冪等性 (Idempotency)</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#_1">名詞與生活比喻</a>
     </li>
@@ -104,6 +106,20 @@
                 <h1 id="ansible">Ansible 學習筆記</h1>
 <h2 id="ansible_1">什麼是 Ansible</h2>
 <p>Ansible 是一個基於 Python 的自動化工具，用來管理伺服器配置、部署應用程式及自動化 IT 任務。它採用 <strong>無代理（agentless）架構</strong>，透過 <strong>SSH 連線</strong> 管理目標主機，使用簡單易讀的 YAML 語法撰寫 Playbook。</p>
+<h2 id="idempotency">📌 什麼是冪等性 (Idempotency)</h2>
+<p>在 自動化配置管理 裡，<strong>冪等性指的是 同一個操作不管執行多少次，最終結果都會是一樣的</strong>。</p>
+<p>換句話說：</p>
+<p>第一次執行：<strong>會做出需要的改變</strong>（例如安裝套件、修改檔案）。</p>
+<p>第二次、第三次再執行：如果系統已經符合需求，就不會<strong>再重複改變</strong>。 </p>
+<p>舉例：</p>
+<pre><code class="language-yaml">- name: 安裝 httpd
+  yum:
+    name: httpd
+    state: present
+</code></pre>
+<p>如果系統 <strong>還沒裝 httpd → Ansible 幫你安裝。</strong></p>
+<p>如果系統 <strong>已經有 httpd → 不會重複安裝。</strong></p>
+<p>這就是<strong>冪等性，避免「無謂的動作」</strong>。</p>
 <h3 id="_1">名詞與生活比喻</h3>
 <table>
 <thead>
