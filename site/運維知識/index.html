@@ -168,8 +168,89 @@
 <td>系統管理員</td>
 <td>OpenShift Operator 自動化</td>
 </tr>
+<tr>
+<td>---</td>
+<td></td>
+<td></td>
+</tr>
 </tbody>
 </table>
+<hr />
+<h1 id="1-ignition">1. Ignition 是什麼？</h1>
+<ul>
+<li><strong>Ignition</strong> 是專為 <strong>Immutable Linux 系統（如 CoreOS 家族）</strong> 設計的 <strong>開機初始化工具</strong>。  </li>
+<li>它在 <strong>第一次開機（first boot）</strong> 時讀取 <code>.ign</code> 配置檔，完成以下操作：</li>
+<li>磁碟分割與格式化  </li>
+<li>檔案寫入（例如 ssh key、配置檔）  </li>
+<li>使用者建立  </li>
+<li>systemd 服務設定  </li>
+<li><strong>特點</strong>：</li>
+<li>僅作用於 <strong>第一次開機</strong>，之後不會再執行  </li>
+<li>保證系統從一開始就達到 <strong>一致的狀態</strong>  </li>
+<li>適合自動化、無人值守部署大規模叢集  </li>
+</ul>
+<p><strong>簡單理解</strong>：專注於 <strong>底層初始化與不可變系統設定</strong>，而非套件安裝或日後修改。
+<img alt="Ignition檔案.png" src="../image/%E9%81%8B%E7%B6%AD%E7%9F%A5%E8%AD%98/Ignition%E6%AA%94%E6%A1%88.png" title="Ignition檔案.png" /></p>
+<hr />
+<h2 id="2-rhcos-ignition-rhel">2. 為什麼 RHCOS 可以用 Ignition，但 RHEL 不能？</h2>
+<ul>
+<li><strong>RHCOS / FCOS (Fedora)</strong>：</li>
+<li><strong>Immutable OS</strong>：系統不可變，核心與套件由映像管理，初始狀態必須在第一次開機就寫好  </li>
+<li><strong>原生支援 Ignition</strong>：開機前讀取 <code>.ign</code>，完成磁碟、使用者、network、systemd 設定  </li>
+<li><strong>RHEL / Rocky Linux / RHCL</strong>：</li>
+<li><strong>Mutable OS</strong>：系統可自由修改，套件和設定可隨時變更  </li>
+<li><strong>不支援 Ignition</strong>：使用 <strong>Kickstart</strong> 或 <strong>cloud-init</strong> 進行自動化安裝  </li>
+<li>核心差異：RHEL 的操作層與文件系統架構不兼容 <code>.ign</code> JSON 配置  </li>
+</ul>
+<p><strong>結論</strong>：RHCOS/FCOS 設計就是為了 <strong>初始開機即設定完整狀態</strong>，因此支持 Ignition；RHEL 是傳統可變系統，初始安裝後再修改設定，無法使用 Ignition。</p>
+<hr />
+<h2 id="3-immutable-linux">3. Immutable Linux 系列整理</h2>
+<h3 id="31-rhcosred-hat-coreos">3.1 RHCOS（Red Hat CoreOS）</h3>
+<ul>
+<li><strong>用途</strong>: 專為 OpenShift Kubernetes 平台設計  </li>
+<li><strong>特性</strong>:</li>
+<li>Immutable OS  </li>
+<li>自動化更新（OSTree 映像）  </li>
+<li>內建容器化，預設支援 Kubernetes  </li>
+<li>Ignition 支援（bootstrap、networking、使用者、ssh key）  </li>
+<li>無人值守安裝  </li>
+</ul>
+<h3 id="32-fedora-coreos-fcos">3.2 Fedora CoreOS (FCOS)</h3>
+<ul>
+<li><strong>開發者</strong>: Red Hat 社群版（RHCOS 上游）  </li>
+<li><strong>特點</strong>:</li>
+<li>Immutable OS  </li>
+<li>自動更新，可滾動或暫停  </li>
+<li>內建 Podman、container tools  </li>
+<li>使用 Ignition 作初始化設定  </li>
+<li><strong>用途</strong>:</li>
+<li>Kubernetes 節點  </li>
+<li>自建 K8s 或 OpenShift 社群版  </li>
+</ul>
+<h3 id="33-ubuntu-core">3.3 Ubuntu Core</h3>
+<ul>
+<li><strong>開發者</strong>: Canonical  </li>
+<li><strong>特點</strong>:</li>
+<li>Snaps 管理應用與系統  </li>
+<li>Immutable 系統核心  </li>
+<li>強調 IoT 與邊緣運算  </li>
+<li><strong>用途</strong>:</li>
+<li>IoT 裝置  </li>
+<li>Kubernetes 節點（需 MicroK8s 或 kubeadm）  </li>
+</ul>
+<h3 id="34-fedora-silverblue">3.4 Fedora Silverblue</h3>
+<ul>
+<li><strong>性質</strong>: Immutable Desktop Linux  </li>
+<li><strong>開發者</strong>: Fedora Project 社群（Red Hat 支持）  </li>
+<li><strong>核心概念</strong>:</li>
+<li>不可變系統，核心與套件固定  </li>
+<li>原子更新，可回滾  </li>
+<li>鼓勵容器化應用（Flatpak）  </li>
+<li><strong>定位</strong>:</li>
+<li>Silverblue = Immutable Desktop  </li>
+<li>Fedora CoreOS = Immutable Server / K8s 節點  </li>
+<li>RHCOS = 企業級 CoreOS，專為 OpenShift  </li>
+</ul>
               
             </div>
           </div><footer>
