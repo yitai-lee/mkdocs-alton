@@ -75,6 +75,40 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#_1">總結表格</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1-ignition">1. Ignition 是什麼？</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-rhcos-ignition-rhel">2. 為什麼 RHCOS 可以用 Ignition，但 RHEL 不能？</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-immutable-linux">3. Immutable Linux 系列整理</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#31-rhcosred-hat-coreos">3.1 RHCOS（Red Hat CoreOS）</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#32-fedora-coreos-fcos">3.2 Fedora CoreOS (FCOS)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#33-ubuntu-core">3.3 Ubuntu Core</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#34-fedora-silverblue">3.4 Fedora Silverblue</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#vagrant-vmware-provider">Vagrant 流浪漢教學 (使用 VMware Provider)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1-vagrant">1️⃣ 介紹 Vagrant 與用途</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2_1">2️⃣ 確認環境</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#21">2.1 錯誤訊息解釋</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-vagrant">3️⃣ 建立 Vagrant 專案資料夾</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-vm">5️⃣ 啟動 VM</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#6-ssh-vm">6️⃣ SSH 連線 VM</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#7">7️⃣ 常用操作指令</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -176,7 +210,7 @@
 </tbody>
 </table>
 <hr />
-<h1 id="1-ignition">1. Ignition 是什麼？</h1>
+<h2 id="1-ignition">1. Ignition 是什麼？</h2>
 <ul>
 <li><strong>Ignition</strong> 是專為 <strong>Immutable Linux 系統（如 CoreOS 家族）</strong> 設計的 <strong>開機初始化工具</strong>。  </li>
 <li>它在 <strong>第一次開機（first boot）</strong> 時讀取 <code>.ign</code> 配置檔，完成以下操作：</li>
@@ -251,6 +285,180 @@
 <li>Fedora CoreOS = Immutable Server / K8s 節點  </li>
 <li>RHCOS = 企業級 CoreOS，專為 OpenShift  </li>
 </ul>
+<hr />
+<h2 id="vagrant-vmware-provider">Vagrant 流浪漢教學 (使用 VMware Provider)</h2>
+<p>本文完整整理了 Vagrant 使用 VMware Provider 的流程，包括環境確認、建立專案、Vagrantfile 配置、啟動 VM、SSH 連線與常用指令，並保留原文說明與提示。</p>
+<hr />
+<h2 id="1-vagrant">1️⃣ 介紹 Vagrant 與用途</h2>
+<p>Vagrant 是 HashiCorp 開發的一個工具，用來建立和管理虛擬機環境。它可以透過不同虛擬化提供者 (VirtualBox、VMware 等) 建立統一的開發環境，使團隊開發、測試和部署更一致。主要特點：</p>
+<ul>
+<li><strong>自動化環境配置</strong>：透過 Vagrantfile 定義 VM 配置，包括 OS、網路、CPU、RAM。</li>
+<li><strong>跨平台</strong>：支援 Windows、Linux、macOS。</li>
+<li><strong>整合 Provisioner</strong>：可使用 Ansible、Chef、Puppet 或 Shell script 自動安裝軟體。</li>
+<li><strong>易於版本控制</strong>：Vagrantfile 可放入 git，讓團隊共用同一環境配置。</li>
+</ul>
+<p>用途舉例：</p>
+<ul>
+<li>開發者快速搭建測試環境。</li>
+<li>測試多 OS 或多網路配置。</li>
+<li>自動化部署軟體或服務。</li>
+</ul>
+<hr />
+<h2 id="2_1">2️⃣ 確認環境</h2>
+<p>在 PowerShell 或 CMD 輸入：</p>
+<pre><code class="language-powershell">vagrant --version
+</code></pre>
+<p>說明：</p>
+<blockquote>
+<p>若顯示版本號，例如 Vagrant 2.x.x，代表 Vagrant 已成功安裝。</p>
+</blockquote>
+<p>VMware 也安裝完成後，確保 Vagrant 能使用 VMware provider：</p>
+<pre><code class="language-powershell">vagrant plugin list
+</code></pre>
+<p>你應該看到：</p>
+<pre><code>vagrant-vmware-desktop
+</code></pre>
+<p><img alt="vagrant plugin list.png" src="../image/%E9%81%8B%E7%B6%AD%E7%9F%A5%E8%AD%98/vagrant%20plugin%20list.png" title="vagrant plugin list.png" /></p>
+<p>若沒有，請先安裝插件：
+<img alt="vagrant plugin list 還沒裝.png" src="../image/%E9%81%8B%E7%B6%AD%E7%9F%A5%E8%AD%98/vagrant%20plugin%20list%20%E9%82%84%E6%B2%92%E8%A3%9D.png" title="vagrant plugin list 還沒裝.png" /></p>
+<pre><code class="language-powershell">vagrant plugin install vagrant-vmware-desktop
+</code></pre>
+<h3 id="21">2.1 錯誤訊息解釋</h3>
+<p>若啟動 VM 時出現：</p>
+<pre><code>Vagrant encountered an error while attempting to load the utility
+service key file. This error can occur if the Vagrant VMware Utility
+has not yet been installed, or if it was installed incorrectly.
+...
+Path:  C:/ProgramData/hashicorp/vagrant-vmware-desktop/certificates/vagrant-utility.client.crt
+Error: No such file or directory
+</code></pre>
+<p>意思是：</p>
+<blockquote>
+<p>你有安裝 vagrant-vmware-desktop 插件，但缺少 Vagrant VMware Utility 這個外掛程式需要的「後端服務」。</p>
+</blockquote>
+<p>解決方式：</p>
+<ol>
+<li>
+<p>安裝 Vagrant VMware Utility</p>
+</li>
+<li>
+<p>到 HashiCorp 官方下載工具：
+     <a href="https://developer.hashicorp.com/vagrant/install/vmware">Vagrant VMware Utility Download</a></p>
+</li>
+<li>下載 Windows 版 MSI 安裝檔，執行安裝。</li>
+</ol>
+<hr />
+<h2 id="3-vagrant">3️⃣ 建立 Vagrant 專案資料夾</h2>
+<p>輸入：</p>
+<pre><code class="language-powershell">vagrant init
+</code></pre>
+<p><img alt="vagrant init.png" src="../image/%E9%81%8B%E7%B6%AD%E7%9F%A5%E8%AD%98/vagrant%20init.png" title="vagrant init.png" /></p>
+<p>說明：</p>
+<blockquote>
+<p>這會建立一個 Vagrantfile。
+此目錄中已儲存一個 <code>Vagrantfile</code>。
+現在，您可以 <code>vagrant up</code> 您的第一個虛擬環境了！
+請閱讀 Vagrantfile 中的註解以及 <code>vagrantup.com</code> 上的文檔，以了解更多關於使用 Vagrant 的資訊。</p>
+</blockquote>
+<hr />
+<pre><code>
+### 4.1 完整 Vagrantfile 範例
+
+```ruby
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(&quot;2&quot;) do |config|
+  config.vm.box = &quot;rockylinux/9&quot;
+
+  # 私有網路
+  config.vm.network &quot;private_network&quot;, ip: &quot;192.168.126.100&quot;
+
+  # 公用網路 (橋接)
+  config.vm.network &quot;public_network&quot;, bridge: &quot;VMware Network Adapter VMnet8&quot;
+
+  # VMware Provider 專屬設定
+  config.vm.provider &quot;vmware_desktop&quot; do |v|
+    v.gui = false
+    v.memory = 2048
+    v.cpus = 2
+  end
+
+  # Shell Provisioner 範例
+  # config.vm.provision &quot;shell&quot;, inline: &lt;&lt;-SHELL
+  #   dnf -y update
+  #   dnf -y install htop
+  # SHELL
+end
+</code></pre>
+<p><img alt="rocky9.png" src="../image/%E9%81%8B%E7%B6%AD%E7%9F%A5%E8%AD%98/rocky9.png" title="rocky9.png" /></p>
+<hr />
+<h2 id="5-vm">5️⃣ 啟動 VM</h2>
+<pre><code class="language-powershell">vagrant up --provider=vmware_desktop
+</code></pre>
+<p><img alt="vagrant up .png" src="../image/%E9%81%8B%E7%B6%AD%E7%9F%A5%E8%AD%98/vagrant%20up%20.png" title="vagrant up .png" /></p>
+<blockquote>
+<p>成功後代表 Vagrant 幫你在 VMware Workstation / Fusion 裡建立並啟動一台虛擬機。</p>
+</blockquote>
+<hr />
+<h2 id="6-ssh-vm">6️⃣ SSH 連線 VM</h2>
+<pre><code class="language-powershell">vagrant ssh
+</code></pre>
+<blockquote>
+<p>若 Windows 沒有 SSH Client，可先透過 <code>vagrant ssh-config</code> 查詢連線資訊，再用其他 SSH 工具 (例如 PuTTY) 連線。</p>
+</blockquote>
+<p>預設帳號密碼：</p>
+<pre><code>vagrant / vagrant
+</code></pre>
+<hr />
+<h2 id="7">7️⃣ 常用操作指令</h2>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>功能</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vagrant status</td>
+<td>查看目前 VM 狀態</td>
+<td>顯示 running / poweroff</td>
+</tr>
+<tr>
+<td>vagrant ssh</td>
+<td>進入 VM</td>
+<td>Windows 下要安裝 SSH Client 或用 vagrant ssh-config 搭配 ssh</td>
+</tr>
+<tr>
+<td>vagrant halt</td>
+<td>關機 (正常 shutdown)</td>
+<td>相當於在 VM 裡下 shutdown -h now</td>
+</tr>
+<tr>
+<td>vagrant suspend</td>
+<td>暫停 VM (類似睡眠)</td>
+<td>下次 vagrant resume 可以快速恢復</td>
+</tr>
+<tr>
+<td>vagrant resume</td>
+<td>喚醒 VM</td>
+<td>對應 suspend</td>
+</tr>
+<tr>
+<td>vagrant reload</td>
+<td>重啟 VM 並套用 Vagrantfile 修改</td>
+<td>例如改了記憶體或網路設定</td>
+</tr>
+<tr>
+<td>vagrant destroy</td>
+<td>刪除 VM (連同硬碟)</td>
+<td>會完全清除，慎用！</td>
+</tr>
+</tbody>
+</table>
+<hr />
               
             </div>
           </div><footer>
