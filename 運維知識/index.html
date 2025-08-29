@@ -105,10 +105,6 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#5-vm">5️⃣ 啟動 VM</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#6-ssh-vm">6️⃣ SSH 連線 VM</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#7">7️⃣ 常用操作指令</a>
-    </li>
     </ul>
                 </li>
               </ul>
@@ -400,6 +396,34 @@ end
 <blockquote>
 <p>成功後代表 Vagrant 幫你在 VMware Workstation / Fusion 裡建立並啟動一台虛擬機。</p>
 </blockquote>
+<h1 id="vagrant-vm-vmware-provider">Vagrant 建立多台 VM 範例 (使用 VMware Provider)</h1>
+<p>以下示範如何在 Vagrantfile 中定義多台虛擬機 (VM)，並分別啟動。</p>
+<hr />
+<h2 id="vagrantfile">Vagrantfile 範例</h2>
+<h1 id="vagrant-vmvmware-provider">Vagrant 建立多台 VM（VMware Provider）</h1>
+<pre><code class="language-ruby">Vagrant.configure(&quot;2&quot;) do |config|
+  # 指定 box（可依需求修改）
+  config.vm.box = &quot;rockylinux/9&quot;
+
+  config.vm.define &quot;vm1&quot; do |vm1|
+    vm1.vm.hostname = &quot;vm1&quot;
+  end
+
+  config.vm.define &quot;vm2&quot; do |vm2|
+    vm2.vm.hostname = &quot;vm2&quot;
+  end
+end
+
+# 啟動第一台
+vagrant up vm1 --provider=vmware_desktop
+
+# 啟動第二台
+vagrant up vm2 --provider=vmware_desktop
+
+# 也可一次啟動全部
+vagrant up --provider=vmware_desktop
+
+</code></pre>
 <hr />
 <h2 id="6-ssh-vm">6️⃣ SSH 連線 VM</h2>
 <pre><code class="language-powershell">vagrant ssh
