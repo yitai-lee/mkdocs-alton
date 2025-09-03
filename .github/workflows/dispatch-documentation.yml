@@ -15,7 +15,7 @@ jobs:
       - name: Send repository_dispatch -> documentation repo
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.darren-0903 }}               # 你的 classic PAT secret
+          token: ${{ secrets.darren_0903 }}               # 你的 classic PAT secret
           repository: salomob-dynasafe/documentation  # 目標 repo
           event-type: docs-update                        # 自訂事件名稱
           client-payload: >-
