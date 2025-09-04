@@ -22,6 +22,7 @@ jobs:
             {
               "ref": "${{ github.ref }}",
               "sha": "${{ github.sha }}",
-              "source_repo_full_name": "${{ github.repository }}"
+              "source_repo_full_name": "${{ github.repository }}",
+              "token_secret": "DARREN_TO_DOCUMENTATION"
             }
 #
