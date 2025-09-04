@@ -21,6 +21,6 @@ jobs:
               "ref": "${{ github.ref }}",
               "sha": "${{ github.sha }}",
               "source_repo_full_name": "${{ github.repository }}",
-              "token_secret": "DARREN_TO_DOCUMENTATION"  # change to your secret name "DARREN_TO_DOCUMENTATION"
+              "token_secret": "DARREN_TO_DOCUMENTATION"  
             }
-#
+## change to your secret name "DARREN_TO_DOCUMENTATION"
