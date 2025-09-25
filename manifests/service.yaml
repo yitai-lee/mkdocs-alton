@@ -9,6 +9,6 @@ spec:
     app: demo
   ports:
   - protocol: TCP
-    port: 80         # ClusterIP 對外還是 80
-    targetPort: 8080 # 對應 Pod 的 containerPort
+    port: 80        # Service 對外還是用 80
+    targetPort: 8080  # 指向 Pod 的 8080
   type: ClusterIP

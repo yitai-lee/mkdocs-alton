@@ -5,9 +5,9 @@ metadata:
   labels:
     app: demo
 spec:
-  replicas: 2   # 建議保留，表示要跑幾個 Pod
+  replicas: 2
   selector:
-    matchLabels:    # 一定要有 selector，Deployment 才能管理 ReplicaSet/Pod
+    matchLabels:
       app: demo
   template:
     metadata:
@@ -20,17 +20,8 @@ spec:
       - name: nginx
         image: nginx:1.21
         ports:
-        - containerPort: 8080   # 不能用 80，因為 SCC 不允許低於 1024 的 port
+        - containerPort: 8080   # Pod 內部用 8080
         securityContext:
           allowPrivilegeEscalation: false
-          runAsUser: 1000720001   # 落在 OpenShift SCC 允許的範圍
-        volumeMounts:
-        - name: cache-volume
-          mountPath: /var/cache/nginx
-        - name: run-volume
-          mountPath: /var/run
-      volumes:
-      - name: cache-volume
-        emptyDir: {}
-      - name: run-volume
-        emptyDir: {}
+          runAsUser: 1000720001  # OpenShift 分配的合法 UID 範圍
+        args: ["nginx", "-g", "daemon off;", "-c", "/etc/nginx/nginx.conf"]
