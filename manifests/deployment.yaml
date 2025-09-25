@@ -1,3 +1,4 @@
+# deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,12 +17,9 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: registry.redhat.io/rhscl/nginx-116-rhel7
+        image: nginx:1.21
         ports:
-        - containerPort: 80
-        volumeMounts:
-        - mountPath: /var/cache/nginx
-          name: cache-volume
-      volumes:
-      - name: cache-volume
-        emptyDir: {}
+        - containerPort: 8080   # 改成非特權 port
+        securityContext:        # 加這段，確保以非 root 執行
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
