@@ -18,10 +18,6 @@ spec:
         runAsNonRoot: true
       containers:
       - name: nginx
-        image: nginx:1.21
+        image: nginxinc/nginx-unprivileged:1.21
         ports:
-        - containerPort: 8080   # Pod 內部用 8080
-        securityContext:
-          allowPrivilegeEscalation: false
-          runAsUser: 1000720001  # OpenShift 分配的合法 UID 範圍
-        args: ["nginx", "-g", "daemon off;", "-c", "/etc/nginx/nginx.conf"]
+        - containerPort: 8080
