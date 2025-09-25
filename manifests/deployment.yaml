@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.21
+        image: registry.redhat.io/rhscl/nginx-116-rhel7
         ports:
         - containerPort: 80
         volumeMounts:
