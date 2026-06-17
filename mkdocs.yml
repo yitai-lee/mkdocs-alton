@@ -13,6 +13,7 @@ nav :
  - loki_pdb_維運整理: loki_pdb_維運整理.md
  - k8s命令: k8s命令.md
  - NotebookLM: NotebookLM.md
+ - K8S-Storage: K8S-Storage.md
 theme:
   name: readthedocs
   logo: image/favicon.ico
