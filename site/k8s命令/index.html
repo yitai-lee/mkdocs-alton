@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Docker常用命令 - Darren</title>
+    <title>k8s命令 - Darren</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Docker\u5e38\u7528\u547d\u4ee4";
-        var mkdocs_page_input_path = "docker_commands.md";
+        var mkdocs_page_name = "k8s\u547d\u4ee4";
+        var mkdocs_page_input_path = "k8s\u547d\u4ee4.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -52,24 +52,8 @@
                 <li class="toctree-l1"><a class="reference internal" href="../%E5%AE%B9%E5%99%A8%E7%9F%A5%E8%AD%98/">Linux 容器筆記</a>
                 </li>
               </ul>
-              <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Docker常用命令</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#1-image">1. 映像檔操作 (Image)</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#2-container">2. 容器操作 (Container)</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#3">3. 容器內操作</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#4">4. 網路與埠口</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#5-volume">5. Volume (資料卷)</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#6-docker-compose">6. Docker Compose</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#7">7. 系統管理</a>
-    </li>
-    </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../docker_commands/">Docker常用命令</a>
                 </li>
               </ul>
               <ul>
@@ -96,8 +80,44 @@
                 <li class="toctree-l1"><a class="reference internal" href="../loki_pdb_%E7%B6%AD%E9%81%8B%E6%95%B4%E7%90%86/">loki_pdb_維運整理</a>
                 </li>
               </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../k8s%E5%91%BD%E4%BB%A4/">k8s命令</a>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">k8s命令</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#_1">一句話用途</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_2">指令全文</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_3">參數逐一說明</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#kubectl">kubectl</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#create">create</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#deployment">deployment</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#web">web</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-imagenginx">--image=nginx</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-dry-runclient">--dry-run=client</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-o-yaml">-o yaml</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_4">常見實務用法</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#yaml">產生 YAML 檔案</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_5">套用到叢集</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dry-run">範例輸出（dry-run 結果）</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_6">重點總結</a>
+    </li>
+    </ul>
                 </li>
               </ul>
               <ul>
@@ -122,7 +142,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Docker常用命令</li>
+      <li class="breadcrumb-item active">k8s命令</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -131,149 +151,106 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="docker">Docker 常用命令整理</h1>
-<h2 id="1-image">1. 映像檔操作 (Image)</h2>
-<pre><code class="language-bash"># 搜尋映像檔
-docker search &lt;image&gt;
-
-# 下載映像檔
-docker pull &lt;image&gt;[:tag]
-
-# 列出本地映像檔
-docker images
-
-# 刪除映像檔
-docker rmi &lt;image_id&gt;
-
-# 檢視映像檔詳細資訊
-docker inspect &lt;image_id&gt;
-
-# 為映像檔加上標籤
-docker tag &lt;image_id&gt; &lt;repo&gt;:&lt;tag&gt;
-
-# 匯出映像檔為 tar
-docker save -o &lt;file&gt;.tar &lt;image&gt;
-
-# 匯入映像檔
-docker load -i &lt;file&gt;.tar
+                <h1 id="kubectl-create-deploymentdry-runclient">kubectl create deployment（dry-run=client）</h1>
+<h2 id="_1">一句話用途</h2>
+<p>在本機端模擬建立 Deployment，輸出 YAML 範本，不會對 Kubernetes 叢集造成任何實際變更。</p>
+<hr />
+<h2 id="_2">指令全文</h2>
+<pre><code>kubectl create deployment web --image=nginx --dry-run=client -o yaml
 </code></pre>
-<h2 id="2-container">2. 容器操作 (Container)</h2>
-<pre><code class="language-bash"># 建立並執行容器 (互動式)
-docker run -it &lt;image&gt; /bin/bash
-
-# 建立並執行容器 (背景執行)
-docker run -d --name &lt;container_name&gt; &lt;image&gt;
-
-# 列出正在執行的容器
-docker ps
-
-# 列出所有容器 (包含停止)
-docker ps -a
-
-# 停止容器
-docker stop &lt;container_id&gt;
-
-# 啟動容器
-docker start &lt;container_id&gt;
-
-# 重啟容器
-docker restart &lt;container_id&gt;
-
-# 刪除容器
-docker rm &lt;container_id&gt;
-
-# 檢視容器詳細資訊
-docker inspect &lt;container_id&gt;
-
-# 檢視容器資源使用
-docker stats
+<hr />
+<h2 id="_3">參數逐一說明</h2>
+<h3 id="kubectl">kubectl</h3>
+<ul>
+<li>Kubernetes 官方 CLI 工具</li>
+<li>用來建立、查詢、修改叢集資源</li>
+</ul>
+<h3 id="create">create</h3>
+<ul>
+<li>動作：建立資源</li>
+<li>搭配 --dry-run=client 時，只進行模擬，不會實際建立</li>
+</ul>
+<h3 id="deployment">deployment</h3>
+<ul>
+<li>資源種類</li>
+<li>表示要產生的是 Deployment 物件</li>
+</ul>
+<h3 id="web">web</h3>
+<ul>
+<li>Deployment 名稱</li>
+<li>
+<p>對應 YAML 節點：</p>
+<p>metadata:
+  name: web</p>
+</li>
+</ul>
+<h3 id="-imagenginx">--image=nginx</h3>
+<ul>
+<li>指定容器映像檔</li>
+<li>
+<p>kubectl 會自動補齊 selector 與 labels</p>
+<p>containers:
+- name: nginx
+  image: nginx</p>
+</li>
+</ul>
+<h3 id="-dry-runclient">--dry-run=client</h3>
+<ul>
+<li>僅在本機端計算</li>
+<li>不送 API Server</li>
+<li>不寫入 etcd</li>
+<li>不建立任何實體資源</li>
+</ul>
+<h3 id="-o-yaml">-o yaml</h3>
+<ul>
+<li>指定輸出格式為 YAML</li>
+<li>用來產生可編輯的資源範本</li>
+</ul>
+<hr />
+<h2 id="_4">常見實務用法</h2>
+<h3 id="yaml">產生 YAML 檔案</h3>
+<pre><code>kubectl create deployment test_web --image=nginx --dry-run=client -o yaml &gt; test_web.yaml
 </code></pre>
-<h2 id="3">3. 容器內操作</h2>
-<pre><code class="language-bash"># 進入容器
-docker exec -it &lt;container_id&gt; /bin/bash
-
-# 查看容器日誌
-docker logs &lt;container_id&gt;
-
-# 實時查看容器日誌
-docker logs -f &lt;container_id&gt;
-
-# 複製檔案：容器 -&gt; 主機
-docker cp &lt;container_id&gt;:/path/in/container /host/path
-
-# 複製檔案：主機 -&gt; 容器
-docker cp /host/path &lt;container_id&gt;:/path/in/container
-
-# 檢視容器內程序
-docker top &lt;container_id&gt;
+<h3 id="_5">套用到叢集</h3>
+<pre><code>kubectl apply -f test_web.yaml
 </code></pre>
-<h2 id="4">4. 網路與埠口</h2>
-<pre><code class="language-bash"># 建立容器並映射埠口
-docker run -d -p 8080:80 &lt;image&gt;
-
-# 檢視網路
-docker network ls
-
-# 建立自訂網路
-docker network create &lt;network_name&gt;
-
-# 加入容器到網路
-docker network connect &lt;network_name&gt; &lt;container_id&gt;
-
-# 從網路移除容器
-docker network disconnect &lt;network_name&gt; &lt;container_id&gt;
-
-# 檢視網路詳細資訊
-docker network inspect &lt;network_name&gt;
+<hr />
+<h2 id="dry-run">範例輸出（dry-run 結果）</h2>
+<pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test_web
+  labels:
+    app: test_web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test_web
+  template:
+    metadata:
+      labels:
+        app: test_web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        resources: {}
+status: {}
 </code></pre>
-<h2 id="5-volume">5. Volume (資料卷)</h2>
-<pre><code class="language-bash"># 建立 Volume
-docker volume create &lt;volume_name&gt;
-
-# 檢視 Volume 列表
-docker volume ls
-
-# 檢視 Volume 詳細資訊
-docker volume inspect &lt;volume_name&gt;
-
-# 刪除 Volume
-docker volume rm &lt;volume_name&gt;
-
-# 建立容器並掛載 Volume
-docker run -d -v &lt;volume_name&gt;:/path/in/container &lt;image&gt;
-</code></pre>
-<h2 id="6-docker-compose">6. Docker Compose</h2>
-<pre><code class="language-bash"># 啟動
-docker-compose up -d
-
-# 停止
-docker-compose down
-
-# 查看服務狀態
-docker-compose ps
-
-# 查看日誌
-docker-compose logs -f
-
-# 重新啟動
-docker-compose restart
-</code></pre>
-<h2 id="7">7. 系統管理</h2>
-<pre><code class="language-bash"># 檢視 Docker 系統資訊
-docker info
-
-# 清理未使用的資源
-docker system prune -a
-
-# 檢視磁碟使用情況
-docker system df
-</code></pre>
+<hr />
+<h2 id="_6">重點總結</h2>
+<p>kubectl create<br />
++ --dry-run=client<br />
++ -o yaml  </p>
+<p>等於：<br />
+由 kubectl 在本機端產生一份合法、可直接使用的 Deployment YAML 範本</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../%E5%AE%B9%E5%99%A8%E7%9F%A5%E8%AD%98/" class="btn btn-neutral float-left" title="Linux 容器筆記"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../ansible%E7%B0%A1%E4%BB%8B%E5%8F%8A%E7%94%A8%E6%B3%95/" class="btn btn-neutral float-right" title="Ansible簡介及用法">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../loki_pdb_%E7%B6%AD%E9%81%8B%E6%95%B4%E7%90%86/" class="btn btn-neutral float-left" title="loki_pdb_維運整理"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../NotebookLM/" class="btn btn-neutral float-right" title="NotebookLM">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -296,10 +273,10 @@ docker system df
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../%E5%AE%B9%E5%99%A8%E7%9F%A5%E8%AD%98/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../loki_pdb_%E7%B6%AD%E9%81%8B%E6%95%B4%E7%90%86/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../ansible%E7%B0%A1%E4%BB%8B%E5%8F%8A%E7%94%A8%E6%B3%95/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../NotebookLM/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
