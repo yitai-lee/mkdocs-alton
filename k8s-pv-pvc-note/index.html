@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Kubernetes / OpenShift PV、PVC、NFS、StatefulSet - Darren</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Kubernetes / OpenShift PV\u3001PVC\u3001NFS\u3001StatefulSet";
+        var mkdocs_page_input_path = "k8s-pv-pvc-note.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="..">
+          <img src="../image/favicon.ico" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../note/">使用 MkDocs 建立文件網站教學筆記</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../%E5%AE%B9%E5%99%A8%E7%9F%A5%E8%AD%98/">Linux 容器筆記</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../docker_commands/">Docker常用命令</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ansible%E7%B0%A1%E4%BB%8B%E5%8F%8A%E7%94%A8%E6%B3%95/">Ansible簡介及用法</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../%E9%81%8B%E7%B6%AD%E7%9F%A5%E8%AD%98/">運維知識</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../operator%E4%BB%8B%E7%B4%B9/">operator介紹</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ocp%E5%91%BD%E4%BB%A4/">ocp命令</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ocp-prot%E4%BB%8B%E7%B4%B9/">ocp-prot介紹</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../loki_pdb_%E7%B6%AD%E9%81%8B%E6%95%B4%E7%90%86/">loki_pdb_維運整理</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../k8s%E5%91%BD%E4%BB%A4/">k8s命令</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../NotebookLM/">NotebookLM</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../K8S-Storage.">K8S-Storage</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../k8s-pv-pvc-note k8s-pv-pvc-note.md">None</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Darren</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Kubernetes / OpenShift PV、PVC、NFS、StatefulSet</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="kubernetes-openshift-pvpvcnfsstatefulset">Kubernetes / OpenShift PV、PVC、NFS、StatefulSet</h1>
+<h2 id="_1">結論</h2>
+<p><code>PV/PVC</code> 可以先用一句話記住：</p>
+<blockquote>
+<p><strong>Pod 要存資料 → 找 PVC 申請 → PVC 綁 PV → PV 背後接 NFS / Ceph / vSphere / 磁碟 → Pod 重建後資料還在。</strong></p>
+</blockquote>
+<p>最簡單關係：</p>
+<pre><code class="language-text">Pod → PVC → PV → 後端儲存
+</code></pre>
+<p>口語化比喻：</p>
+<table>
+<thead>
+<tr>
+<th>Kubernetes 物件</th>
+<th>比喻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Pod</code></td>
+<td>要存資料的程式 / 租客</td>
+</tr>
+<tr>
+<td><code>PVC</code></td>
+<td>儲存申請單 / 租屋申請單</td>
+</tr>
+<tr>
+<td><code>PV</code></td>
+<td>實際分配到的儲存空間 / 房子</td>
+</tr>
+<tr>
+<td><code>NFS</code></td>
+<td>真正放資料的位置 / 房子實際所在地</td>
+</tr>
+<tr>
+<td><code>StorageClass</code></td>
+<td>儲存方案 / 房型方案</td>
+</tr>
+<tr>
+<td><code>StatefulSet</code></td>
+<td>幫每個 Pod 固定配一份資料與名字的管理員</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-pod">1. Pod 為什麼需要持久化儲存</h2>
+<p><code>Pod</code> 是臨時的，可能會被刪除、重建、搬到別的 Node。</p>
+<p>如果資料只放在 Pod 裡面：</p>
+<pre><code class="language-text">Pod 被刪掉 → 資料可能一起消失
+</code></pre>
+<p>所以 Kubernetes 要把「程式」和「資料」分開：</p>
+<pre><code class="language-text">Pod = 跑程式
+PV/PVC = 放資料
+</code></pre>
+<p>口語化：</p>
+<pre><code class="language-text">Pod 像臨時工
+資料像工作成果
+
+臨時工可以換人
+但工作成果不能不見
+
+所以資料不能只放在 Pod 裡
+要放到外部儲存
+</code></pre>
+<p>常見需要持久化儲存的服務：</p>
+<table>
+<thead>
+<tr>
+<th>類型</th>
+<th>為什麼需要 PVC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>資料庫</td>
+<td>MySQL、PostgreSQL、MongoDB 資料不能跟 Pod 一起消失</td>
+</tr>
+<tr>
+<td>檔案上傳服務</td>
+<td>使用者上傳的附件、圖片要保留</td>
+</tr>
+<tr>
+<td>StatefulSet</td>
+<td>每個 Pod 要有固定資料</td>
+</tr>
+<tr>
+<td>NFS 共享資料</td>
+<td>多個服務需要共用資料</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-pv">2. PV 是什麼</h2>
+<p><code>PV</code> 全名是 <code>PersistentVolume</code>。</p>
+<p>口語化：</p>
+<pre><code class="language-text">PV = Kubernetes / OpenShift 看得到的一塊真正儲存空間
+</code></pre>
+<p>但 PV 背後不一定是一顆實體硬碟，也可能是：</p>
+<pre><code class="language-text">NFS
+Ceph
+vSphere Disk
+iSCSI
+Cloud Disk
+Local Disk
+</code></pre>
+<p>在這份筆記的範例中，PV 背後是 NFS：</p>
+<pre><code class="language-text">NFS Server 上有 /nfsdata/1
+Kubernetes 把 /nfsdata/1 包裝成一個 PV
+Pod 不直接知道 /nfsdata/1
+Pod 只透過 PVC 使用它
+</code></pre>
+<p>範例：</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfspv1
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs
+  nfs:
+    path: /nfsdata/1
+    server: 10.245.68.72
+</code></pre>
+<p>欄位說明：</p>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind: PersistentVolume</code></td>
+<td>這是一個 PV</td>
+</tr>
+<tr>
+<td><code>metadata.name</code></td>
+<td>PV 名稱</td>
+</tr>
+<tr>
+<td><code>capacity.storage</code></td>
+<td>這塊儲存多大</td>
+</tr>
+<tr>
+<td><code>accessModes</code></td>
+<td>支援哪種讀寫模式</td>
+</tr>
+<tr>
+<td><code>persistentVolumeReclaimPolicy</code></td>
+<td>PVC 刪掉後，PV 要怎麼處理</td>
+</tr>
+<tr>
+<td><code>storageClassName</code></td>
+<td>這塊 PV 屬於哪個儲存類別</td>
+</tr>
+<tr>
+<td><code>nfs.server</code></td>
+<td>NFS Server IP</td>
+</tr>
+<tr>
+<td><code>nfs.path</code></td>
+<td>NFS 實際目錄</td>
+</tr>
+</tbody>
+</table>
+<p>重點：</p>
+<pre><code class="language-text">PV = 管理員或系統準備好的儲存資源
+</code></pre>
+<hr />
+<h2 id="3-pvc">3. PVC 是什麼</h2>
+<p><code>PVC</code> 全名是 <code>PersistentVolumeClaim</code>。</p>
+<p>口語化：</p>
+<pre><code class="language-text">PVC = 儲存申請單
+</code></pre>
+<p>PVC 不是真正的硬碟。<br />
+PVC 只是跟 Kubernetes 說：</p>
+<pre><code class="language-text">我要 1Gi
+我要 ReadWriteOnce
+我要 storageClassName=nfs
+</code></pre>
+<p>範例：</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: demo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: nfs
+  resources:
+    requests:
+      storage: 1Gi
+</code></pre>
+<p>欄位說明：</p>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind: PersistentVolumeClaim</code></td>
+<td>這是一張 PVC 申請單</td>
+</tr>
+<tr>
+<td><code>metadata.name</code></td>
+<td>PVC 名稱</td>
+</tr>
+<tr>
+<td><code>accessModes</code></td>
+<td>申請哪種讀寫模式</td>
+</tr>
+<tr>
+<td><code>storageClassName</code></td>
+<td>申請哪種儲存類別</td>
+</tr>
+<tr>
+<td><code>resources.requests.storage</code></td>
+<td>申請多少容量</td>
+</tr>
+</tbody>
+</table>
+<p>一句話：</p>
+<pre><code class="language-text">PVC = 我要什麼
+PV = 實際給你什麼
+</code></pre>
+<hr />
+<h2 id="4-podpvcpvnfs">4. Pod、PVC、PV、NFS 的關係</h2>
+<p>完整資料流：</p>
+<pre><code class="language-text">Pod
+  │
+  │ 我要把資料放到 /data
+  ▼
+PVC
+  │
+  │ 我要 1Gi + RWO + storageClassName=nfs
+  ▼
+PV
+  │
+  │ 找到符合條件的 nfspv1
+  ▼
+NFS
+  │
+  │ 實際資料寫到 10.245.68.72:/nfsdata/1
+  ▼
+資料真的被保存
+</code></pre>
+<p>口語化：</p>
+<pre><code class="language-text">Pod：我要硬碟
+PVC：我幫你申請
+PV：我這裡有一塊符合的
+NFS：資料最後放我這裡
+</code></pre>
+<p>最重要：</p>
+<pre><code class="language-text">Pod 不直接掛 PV
+Pod 掛 PVC
+PVC 再綁 PV
+PV 背後接 NFS / Ceph / vSphere / 磁碟
+</code></pre>
+<hr />
+<h2 id="5-pvc-pv">5. PVC 怎麼找到 PV</h2>
+<p>PVC 要綁定 PV，主要看三個條件：</p>
+<pre><code class="language-text">capacity
+accessModes
+storageClassName
+</code></pre>
+<h3 id="51-capacity">5.1 capacity：容量</h3>
+<p>PVC 要 <code>1Gi</code>，PV 至少要 <code>1Gi</code>。</p>
+<table>
+<thead>
+<tr>
+<th>PVC 要求</th>
+<th style="text-align: right;">PV 容量</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1Gi</code></td>
+<td style="text-align: right;"><code>0.9Gi</code></td>
+<td>不行，太小</td>
+</tr>
+<tr>
+<td><code>1Gi</code></td>
+<td style="text-align: right;"><code>1Gi</code></td>
+<td>可以</td>
+</tr>
+<tr>
+<td><code>1Gi</code></td>
+<td style="text-align: right;"><code>1.2Gi</code></td>
+<td>可以，但多給一點</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-accessmodes">5.2 accessModes：讀寫模式</h3>
+<p>PVC 要的讀寫模式，PV 要能支援。</p>
+<p>常見模式：</p>
+<pre><code class="language-text">ReadWriteOnce
+ReadOnlyMany
+ReadWriteMany
+</code></pre>
+<h3 id="53-storageclassname">5.3 storageClassName：儲存類別</h3>
+<p>名稱要一致。</p>
+<table>
+<thead>
+<tr>
+<th>PVC</th>
+<th>PV</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nfs</code></td>
+<td><code>nfs</code></td>
+<td>可以</td>
+</tr>
+<tr>
+<td><code>nfs</code></td>
+<td><code>nfs1</code></td>
+<td>不行</td>
+</tr>
+<tr>
+<td><code>standard</code></td>
+<td><code>nfs</code></td>
+<td>不行</td>
+</tr>
+</tbody>
+</table>
+<p>範例：</p>
+<pre><code class="language-text">PVC 要求：
+1Gi
+ReadWriteOnce
+storageClassName=nfs
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>PV</th>
+<th style="text-align: right;">容量</th>
+<th>模式</th>
+<th>類別</th>
+<th>可不可綁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nfspv1</code></td>
+<td style="text-align: right;"><code>1Gi</code></td>
+<td><code>RWO</code></td>
+<td><code>nfs</code></td>
+<td>可以</td>
+</tr>
+<tr>
+<td><code>nfspv2</code></td>
+<td style="text-align: right;"><code>0.9Gi</code></td>
+<td><code>RWO</code></td>
+<td><code>nfs</code></td>
+<td>不行，容量太小</td>
+</tr>
+<tr>
+<td><code>nfspv3</code></td>
+<td style="text-align: right;"><code>1.2Gi</code></td>
+<td><code>RWO</code></td>
+<td><code>nfs</code></td>
+<td>可以</td>
+</tr>
+<tr>
+<td><code>nfspv5</code></td>
+<td style="text-align: right;"><code>1Gi</code></td>
+<td><code>RWX</code></td>
+<td><code>nfs</code></td>
+<td>視 PVC 需求與後端支援而定</td>
+</tr>
+<tr>
+<td><code>nfspv6</code></td>
+<td style="text-align: right;"><code>1Gi</code></td>
+<td><code>RWO</code></td>
+<td><code>nfs1</code></td>
+<td>不行，類別不同</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-rworoxrwx">6. RWO、ROX、RWX 怎麼記</h2>
+<p>原筆記中有一個地方要修正：</p>
+<blockquote>
+<p><code>RWX</code> 不是多節點只讀。<br />
+<code>RWX</code> 是多節點讀寫。<br />
+<code>ROX</code> 才是多節點只讀。</p>
+</blockquote>
+<p>正確表格：</p>
+<table>
+<thead>
+<tr>
+<th>縮寫</th>
+<th>全名</th>
+<th>口語化</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RWO</code></td>
+<td><code>ReadWriteOnce</code></td>
+<td>一邊寫</td>
+<td>通常單一 Node 可讀寫</td>
+</tr>
+<tr>
+<td><code>ROX</code></td>
+<td><code>ReadOnlyMany</code></td>
+<td>多邊讀</td>
+<td>多個 Node 可唯讀</td>
+</tr>
+<tr>
+<td><code>RWX</code></td>
+<td><code>ReadWriteMany</code></td>
+<td>多邊讀寫</td>
+<td>多個 Node 可讀寫</td>
+</tr>
+<tr>
+<td><code>RWOP</code></td>
+<td><code>ReadWriteOncePod</code></td>
+<td>單一 Pod 專用</td>
+<td>只允許一個 Pod 讀寫</td>
+</tr>
+</tbody>
+</table>
+<p>最短記法：</p>
+<pre><code class="language-text">RWO = 一個地方寫
+ROX = 很多地方讀
+RWX = 很多地方讀寫
+</code></pre>
+<p>常見搭配：</p>
+<table>
+<thead>
+<tr>
+<th>儲存類型</th>
+<th>常見模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>block storage / iSCSI / vSphere Disk</td>
+<td>多半是 <code>RWO</code></td>
+</tr>
+<tr>
+<td>NFS</td>
+<td>常見 <code>RWX</code></td>
+</tr>
+<tr>
+<td>CephFS</td>
+<td>常見 <code>RWX</code></td>
+</tr>
+<tr>
+<td>Ceph RBD</td>
+<td>常見 <code>RWO</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-retaindeleterecycle">7. 回收策略：Retain、Delete、Recycle</h2>
+<p>這個是在講：</p>
+<pre><code class="language-text">PVC 刪掉後，PV 和資料要怎麼辦？
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>口語化</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Retain</code></td>
+<td>資料保留</td>
+<td>PVC 刪掉後，PV 和資料還在，要人工處理</td>
+</tr>
+<tr>
+<td><code>Delete</code></td>
+<td>一起刪掉</td>
+<td>PVC 刪掉後，後端 volume 可能一起刪</td>
+</tr>
+<tr>
+<td><code>Recycle</code></td>
+<td>清空再重用</td>
+<td>舊做法，已不建議使用</td>
+</tr>
+</tbody>
+</table>
+<p>現在實務重點：</p>
+<pre><code class="language-text">Retain = 安全，資料保留，但要手動清
+Delete = 方便，但刪 PVC 可能連資料一起刪
+Recycle = 舊東西，不建議新環境使用
+</code></pre>
+<p>學習時先背：</p>
+<pre><code class="language-text">正式環境不要亂刪 PVC
+因為 Delete policy 可能真的把後端資料刪掉
+</code></pre>
+<hr />
+<h2 id="8-pvpvc">8. PV/PVC 狀態怎麼看</h2>
+<h3 id="pv">PV 狀態</h3>
+<table>
+<thead>
+<tr>
+<th>狀態</th>
+<th>口語化</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Available</code></td>
+<td>空房</td>
+<td>PV 還沒被 PVC 使用</td>
+</tr>
+<tr>
+<td><code>Bound</code></td>
+<td>已出租</td>
+<td>PV 已經綁到 PVC</td>
+</tr>
+<tr>
+<td><code>Released</code></td>
+<td>租客走了但還沒整理</td>
+<td>PVC 被刪，但 PV 還沒回到可用狀態</td>
+</tr>
+<tr>
+<td><code>Failed</code></td>
+<td>整理失敗</td>
+<td>回收失敗</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pvc">PVC 狀態</h3>
+<table>
+<thead>
+<tr>
+<th>狀態</th>
+<th>口語化</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Pending</code></td>
+<td>還沒申請到</td>
+<td>找不到符合的 PV</td>
+</tr>
+<tr>
+<td><code>Bound</code></td>
+<td>申請成功</td>
+<td>已經綁到 PV</td>
+</tr>
+<tr>
+<td><code>Lost</code></td>
+<td>找不到原本 PV</td>
+<td>綁定關係出問題</td>
+</tr>
+</tbody>
+</table>
+<p>最容易卡的是：</p>
+<pre><code class="language-text">PVC Pending
+</code></pre>
+<p>通常代表：</p>
+<pre><code class="language-text">沒有符合條件的 PV
+StorageClass 不對
+容量不夠
+accessModes 不對
+CSI / provisioner 有問題
+</code></pre>
+<hr />
+<h2 id="9-statefulset-pvc">9. StatefulSet 為什麼會自動建立 PVC</h2>
+<p><code>StatefulSet</code> 是給有狀態應用用的。</p>
+<p>例如：</p>
+<pre><code class="language-text">資料庫
+主從服務
+需要固定資料的服務
+需要固定 Pod 名稱的服務
+</code></pre>
+<p><code>Deployment</code> 的 Pod 名稱通常是亂數：</p>
+<pre><code class="language-text">nginx-7f8c9d6b4-abcde
+</code></pre>
+<p>刪掉重建後名字可能變。</p>
+<p><code>StatefulSet</code> 的 Pod 名稱固定：</p>
+<pre><code class="language-text">web-0
+web-1
+web-2
+</code></pre>
+<p>而且它可以透過 <code>volumeClaimTemplates</code> 幫每個 Pod 建自己的 PVC。</p>
+<p>範例：</p>
+<pre><code class="language-yaml">volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: nfs
+      resources:
+        requests:
+          storage: 1Gi
+</code></pre>
+<p>如果 StatefulSet 叫 <code>web</code>，Pod 是：</p>
+<pre><code class="language-text">web-0
+web-1
+web-2
+</code></pre>
+<p>那 PVC 會像：</p>
+<pre><code class="language-text">www-web-0
+www-web-1
+www-web-2
+</code></pre>
+<p>意思是：</p>
+<pre><code class="language-text">web-0 有自己的 PVC
+web-1 有自己的 PVC
+web-2 有自己的 PVC
+</code></pre>
+<hr />
+<h2 id="10-pod">10. Pod 刪除後資料為什麼還在</h2>
+<p>因為資料不是存在 Pod 裡。</p>
+<p>資料實際流程：</p>
+<pre><code class="language-text">web-0
+  │
+  │ 寫入 /usr/local/nginx/html/index.html
+  ▼
+PVC：www-web-0
+  ▼
+PV：nfspv7
+  ▼
+NFS：/nfsdata/7/index.html
+</code></pre>
+<p>刪掉 <code>web-0</code>：</p>
+<pre><code class="language-text">Pod 消失
+PVC 還在
+PV 還在
+NFS 資料還在
+</code></pre>
+<p>等 <code>web-0</code> 重建：</p>
+<pre><code class="language-text">新的 web-0
+重新掛回 www-web-0
+所以還看得到原本資料
+</code></pre>
+<p>這就是 StatefulSet 的重點：</p>
+<pre><code class="language-text">Pod 可以重建
+資料要延續
+身份要固定
+</code></pre>
+<hr />
+<h2 id="11-statefulset-10-pending">11. 為什麼 StatefulSet 擴到 10 個會 Pending</h2>
+<p>範例：</p>
+<pre><code class="language-bash">kubectl scale statefulSet web --replicas=10
+</code></pre>
+<p>不是所有 Pod 都一定會成功。<br />
+原因是每個 Pod 都需要一個 PVC，而每個 PVC 都要找到符合條件的 PV。</p>
+<p>假設 PVC 要：</p>
+<pre><code class="language-text">1Gi
+ReadWriteOnce
+storageClassName=nfs
+</code></pre>
+<p>但剩下的 PV 是：</p>
+<table>
+<thead>
+<tr>
+<th>PV</th>
+<th>問題</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nfspv2</code></td>
+<td>只有 <code>0.9Gi</code>，容量太小</td>
+</tr>
+<tr>
+<td><code>nfspv5</code></td>
+<td>是 <code>RWX</code>，不一定符合 PVC 要求</td>
+</tr>
+<tr>
+<td><code>nfspv6</code></td>
+<td><code>storageClassName=nfs1</code>，類別不同</td>
+</tr>
+</tbody>
+</table>
+<p>所以後面的 Pod 會卡住：</p>
+<pre><code class="language-text">Pod 等 PVC
+PVC 等 PV
+PV 沒有符合的
+所以 Pod Pending / ContainerCreating
+</code></pre>
+<p>文字圖：</p>
+<pre><code class="language-text">StatefulSet replicas=10
+  │
+  ├─ web-0 → PVC → PV 成功
+  ├─ web-1 → PVC → PV 成功
+  ├─ web-2 → PVC → PV 成功
+  ├─ web-3 → PVC → PV 成功
+  └─ web-4 → PVC 找不到合適 PV → Pending
+</code></pre>
+<hr />
+<h2 id="12-yaml">12. 最小 YAML 範例</h2>
+<h3 id="121-pvc">12.1 PVC</h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: demo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: nfs
+  resources:
+    requests:
+      storage: 1Gi
+</code></pre>
+<h3 id="122-pod-pvc">12.2 Pod 掛 PVC</h3>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod
+spec:
+  containers:
+    - name: app
+      image: nginx:latest
+      volumeMounts:
+        - name: data
+          mountPath: /usr/share/nginx/html
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: demo-pvc
+</code></pre>
+<p>欄位重點：</p>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>claimName: demo-pvc</code></td>
+<td>Pod 要掛哪個 PVC</td>
+</tr>
+<tr>
+<td><code>mountPath</code></td>
+<td>掛到 container 裡哪個路徑</td>
+</tr>
+<tr>
+<td><code>volumeMounts.name</code></td>
+<td>要跟 <code>volumes.name</code> 對上</td>
+</tr>
+<tr>
+<td><code>storageClassName</code></td>
+<td>要跟 PV 或 StorageClass 對上</td>
+</tr>
+<tr>
+<td><code>resources.requests.storage</code></td>
+<td>要多少容量</td>
+</tr>
+</tbody>
+</table>
+<p>OpenShift / 離線環境注意：</p>
+<pre><code class="language-text">image: nginx:latest
+</code></pre>
+<p>正式或離線環境不能假設可拉 Docker Hub，要改成內部 registry image。</p>
+<hr />
+<h2 id="13">13. 唯讀檢查命令</h2>
+<h3 id="pv_1">看 PV</h3>
+<pre><code class="language-bash">kubectl get pv
+</code></pre>
+<p>目的：看叢集有哪些 PV、容量、狀態、StorageClass。<br />
+預期：有 <code>Available</code> 或已綁定的 <code>Bound</code>。<br />
+失敗代表：沒有可用 PV，PVC 可能會 <code>Pending</code>。</p>
+<p>OpenShift：</p>
+<pre><code class="language-bash">oc get pv
+</code></pre>
+<hr />
+<h3 id="pvc_1">看 PVC</h3>
+<pre><code class="language-bash">kubectl get pvc
+</code></pre>
+<p>目的：看 PVC 是否綁到 PV。<br />
+預期：<code>STATUS</code> 是 <code>Bound</code>。<br />
+失敗代表：<code>Pending</code> 表示還沒找到合適 PV。</p>
+<p>OpenShift：</p>
+<pre><code class="language-bash">oc get pvc
+</code></pre>
+<hr />
+<h3 id="pvc_2">看 PVC 詳細原因</h3>
+<pre><code class="language-bash">kubectl describe pvc &lt;pvc-name&gt;
+</code></pre>
+<p>目的：看 PVC Events。<br />
+預期：沒有 binding / provisioning 錯誤。<br />
+失敗代表：通常是容量、accessModes、StorageClass、CSI provisioner 問題。</p>
+<p>OpenShift：</p>
+<pre><code class="language-bash">oc describe pvc &lt;pvc-name&gt;
+</code></pre>
+<hr />
+<h3 id="pod">看 Pod 狀態</h3>
+<pre><code class="language-bash">kubectl get pod -o wide
+</code></pre>
+<p>目的：看 Pod 是否 Running，以及在哪個 Node。<br />
+預期：<code>Running</code>。<br />
+失敗代表：如果卡 <code>ContainerCreating</code>，可能是 volume 掛載問題。</p>
+<p>OpenShift：</p>
+<pre><code class="language-bash">oc get pod -o wide
+</code></pre>
+<hr />
+<h3 id="pod_1">看 Pod 掛載事件</h3>
+<pre><code class="language-bash">kubectl describe pod &lt;pod-name&gt;
+</code></pre>
+<p>目的：看 Pod Events。<br />
+預期：沒有 <code>FailedMount</code>、<code>MountVolume</code>、<code>AttachVolume</code>。<br />
+失敗代表：PVC 沒 Bound、NFS 連不到、CSI 掛載失敗、權限問題。</p>
+<p>OpenShift：</p>
+<pre><code class="language-bash">oc describe pod &lt;pod-name&gt;
+</code></pre>
+<hr />
+<h2 id="14">14. 三種常見錯誤怎麼判斷</h2>
+<h3 id="a-pvc-pending">A. PVC Pending</h3>
+<p>口語化：</p>
+<pre><code class="language-text">申請單送出去了，但沒找到硬碟
+</code></pre>
+<p>檢查：</p>
+<pre><code class="language-bash">kubectl describe pvc &lt;pvc-name&gt;
+kubectl get pv
+</code></pre>
+<p>常見原因：</p>
+<table>
+<thead>
+<tr>
+<th>原因</th>
+<th>判斷</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容量不足</td>
+<td>PVC 要 <code>1Gi</code>，PV 只有 <code>0.9Gi</code></td>
+</tr>
+<tr>
+<td>StorageClass 不同</td>
+<td>PVC <code>nfs</code>，PV <code>nfs1</code></td>
+</tr>
+<tr>
+<td>accessModes 不合</td>
+<td>PVC 要的模式，PV 不支援</td>
+</tr>
+<tr>
+<td>沒有 PV</td>
+<td>沒有 <code>Available</code> PV</td>
+</tr>
+<tr>
+<td>動態供應失敗</td>
+<td>StorageClass / CSI Driver 有問題</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="b-pod-containercreating">B. Pod ContainerCreating</h3>
+<p>口語化：</p>
+<pre><code class="language-text">Pod 要起來了，但硬碟還沒掛好
+</code></pre>
+<p>檢查：</p>
+<pre><code class="language-bash">kubectl describe pod &lt;pod-name&gt;
+kubectl get pvc
+</code></pre>
+<p>常見原因：</p>
+<table>
+<thead>
+<tr>
+<th>原因</th>
+<th>判斷</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PVC 還沒 Bound</td>
+<td>先看 <code>kubectl get pvc</code></td>
+</tr>
+<tr>
+<td>NFS 掛不上</td>
+<td>Events 會有 <code>FailedMount</code></td>
+</tr>
+<tr>
+<td>Node 無法連 NFS</td>
+<td>特定 Node 上一直失敗</td>
+</tr>
+<tr>
+<td>CSI driver 問題</td>
+<td>Events 有 attach / mount 失敗</td>
+</tr>
+<tr>
+<td>權限問題</td>
+<td>掛上後寫入失敗</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="c-permission-denied">C. Permission denied</h3>
+<p>口語化：</p>
+<pre><code class="language-text">硬碟拿到了，但鑰匙不對
+</code></pre>
+<p>檢查：</p>
+<pre><code class="language-bash">kubectl exec -it &lt;pod-name&gt; -- id
+kubectl exec -it &lt;pod-name&gt; -- ls -ld &lt;mount-path&gt;
+kubectl exec -it &lt;pod-name&gt; -- sh -c 'touch &lt;mount-path&gt;/test-write'
+</code></pre>
+<p>目的：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>看什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>container 內實際 UID/GID</td>
+</tr>
+<tr>
+<td><code>ls -ld</code></td>
+<td>目錄 owner/group/permission</td>
+</tr>
+<tr>
+<td><code>touch</code></td>
+<td>是否真的能寫入</td>
+</tr>
+</tbody>
+</table>
+<p>OpenShift 特別注意：</p>
+<pre><code class="language-text">OpenShift 常用隨機 UID
+所以你不能假設 container 是 root
+也不能假設 chmod 777 / no_root_squash 是正式可接受做法
+</code></pre>
+<hr />
+<h2 id="15">15. 原筆記中要修正或注意的地方</h2>
+<table>
+<thead>
+<tr>
+<th>原筆記內容 / 做法</th>
+<th>判斷</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RWX 多節點只讀</code></td>
+<td>錯，<code>RWX</code> 是多節點讀寫；<code>ROX</code> 才是多節點只讀</td>
+</tr>
+<tr>
+<td><code>Recycle</code></td>
+<td>已過時，不建議新環境使用</td>
+</tr>
+<tr>
+<td><code>chmod 777</code></td>
+<td>實驗方便，正式環境不建議</td>
+</tr>
+<tr>
+<td><code>no_root_squash</code></td>
+<td>實驗方便，正式環境有安全風險</td>
+</tr>
+<tr>
+<td><code>--force --grace-period=0</code> 刪 PV</td>
+<td>高風險，不建議正式環境</td>
+</tr>
+<tr>
+<td>手動 edit PV 清除 claimRef</td>
+<td>實驗可理解流程，正式環境要先確認資料與回收策略</td>
+</tr>
+<tr>
+<td>用 NFS 跑資料庫類 StatefulSet</td>
+<td>可學概念，但正式要評估一致性、效能、鎖定與 HA</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="16">16. 最後總整理</h2>
+<pre><code class="language-text">Pod 是跑程式的
+PVC 是申請單
+PV 是 Kubernetes 看到的儲存資源
+NFS / Ceph / vSphere 才是真正放資料的地方
+
+Pod 掛 PVC
+PVC 綁 PV
+PV 指到後端儲存
+
+PVC Pending = 找不到合適 PV
+Pod ContainerCreating = volume 還沒掛好
+Permission denied = 掛好了但權限不對
+
+StatefulSet 會幫每個 Pod 建自己的 PVC
+Pod 刪掉資料還在
+PVC 刪掉後 PV 可能變 Released
+</code></pre>
+<hr />
+<h2 id="17">17. 五句話記住</h2>
+<pre><code class="language-text">1. PVC 不是硬碟，是申請單。
+2. PV 才是 Kubernetes 看到的儲存資源。
+3. Pod 掛 PVC，不是直接掛 PV。
+4. 資料真正存在 NFS / Ceph / vSphere / 磁碟。
+5. StatefulSet 會讓每個 Pod 固定掛回自己的 PVC，所以 Pod 重建後資料還在。
+</code></pre>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
